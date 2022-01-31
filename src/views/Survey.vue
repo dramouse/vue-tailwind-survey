@@ -9,14 +9,42 @@
       >
       вашей квартиры
     </h1>
-    <question-window />
+    <QuestionWindow :question="currentQuestion" />
   </div>
 </template>
 
 <script>
 import QuestionWindow from "../components/Survey/QuestionWindow.vue";
+import questionsData from "../data/questions.js";
+
 export default {
   name: "Survey",
   components: { QuestionWindow },
+  data() {
+    return {
+      currentQuestion: null,
+    };
+  },
+  methods: {
+    updateQuestion(to) {
+      let questionId;
+      if (to) {
+        questionId = to.params.id;
+      } else {
+        questionId = this.$route.params.id;
+      }
+      this.currentQuestion = questionsData.questions.find(
+        (item) => item.id === +questionId
+      );
+      console.log(questionId, this.currentQuestion);
+    },
+  },
+  beforeMount() {
+    this.updateQuestion();
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.updateQuestion(to);
+    next();
+  },
 };
 </script>

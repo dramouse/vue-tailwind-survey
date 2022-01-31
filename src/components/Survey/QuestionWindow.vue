@@ -2,30 +2,37 @@
   <div
     class="border border-solid border-light max-w-5xl pb-5 mx-auto pt-4 px-4 md:px-16 md:pt-6 md:pb-10"
   >
-    <p class="text-gray-400 mb-3 md:mb-7">Вопрос 1 из 6</p>
+    <p class="text-gray-400 mb-3 md:mb-7">Вопрос {{ question.id }} из 6</p>
     <hr class="mb-3 md:mb-9" />
     <h2 class="text-lg text-darkBlue mb-5 md:text-3xl md:mb-11">
-      Какие у вас правоустанавливающие документы?
+      {{ question.title }}
     </h2>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mb-10 md:mb-14 md:gap-6">
-      <!-- <label v-for="n in 6" class="cursor-pointer">
+      <label
+        v-for="answer in question.answers"
+        :key="answer"
+        class="cursor-pointer"
+      >
         <div
           :class="`checkbox flex items-center relative pl-10 pr-5 border border-solid rounded-xl h-answer md:pl-16 md:h-answerMd ${
-            current === 'aboba' ? 'active border-chosenBlue' : 'border-light'
+            chosen === answer ? 'active border-chosenBlue' : 'border-light'
           }`"
         >
           <input
-            v-model="current"
+            v-model="chosen"
             type="radio"
-            value="aboba"
+            :value="answer"
             name="ans"
             class="hidden"
           />
-          Вариант
+          {{ answer }}
         </div>
-      </label> -->
+      </label>
     </div>
-    <button class="bg-mainRed rounded-xl py-4 px-10 text-white ml-auto block">
+    <button
+      @click="confirmHandler"
+      class="bg-mainRed rounded-xl py-4 px-10 text-white ml-auto block"
+    >
       Далее
     </button>
   </div>
@@ -34,14 +41,23 @@
 <script>
 export default {
   name: "QuestionWindow",
+  props: {
+    question: Object,
+  },
   data() {
     return {
-      current: null,
+      chosen: null,
     };
   },
   methods: {
-    log() {
-      console.log("click");
+    confirmHandler(id) {
+      if (+this.$route.params.id === 1) {
+        const answerIndex = this.question.answers.indexOf(this.chosen);
+        const scenarioNumber = answerIndex + 1;
+        const scenario = this.question.scenarios[scenarioNumber];
+        this.$store.dispatch("setScriptByScenario", scenario);
+      }
+      this.$router.push(`${id}`);
     },
   },
 };
