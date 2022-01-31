@@ -13,12 +13,12 @@
         Хочу безопасно и легко <br class="hidden md:inline" />
         продать или купить квартиру
       </h3>
-      <router-link
-        to="/questions/1"
-        tag="button"
-        class="rounded-xl bg-mainRed hover:bg-mainRedHover transition-all text-white w-full py-3 mb-9 md:py-6 text-2xl"
-      >
-        Начать
+      <router-link to="/questions">
+        <button
+          class="rounded-xl bg-mainRed hover:bg-mainRedHover transition-all text-white w-full py-3 mb-9 md:py-6 text-2xl"
+        >
+          Начать
+        </button>
       </router-link>
       <p class="text-grey max-w-360px text-xs leading-6 mb-6 md:text-base">
         После завершения опроса вы получите PDF файл с содержащий:

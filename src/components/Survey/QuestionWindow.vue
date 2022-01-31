@@ -2,7 +2,10 @@
   <div
     class="border border-solid border-light max-w-5xl pb-5 mx-auto pt-4 px-4 md:px-16 md:pt-6 md:pb-10"
   >
-    <p class="text-gray-400 mb-3 md:mb-7">Вопрос {{ question.id }} из 6</p>
+    <p class="text-gray-400 mb-3 md:mb-7">
+      Вопрос {{ currentQuestionIndex + 1 }} из
+      {{ questionsCount === 1 ? 8 : questionsCount }}
+    </p>
     <hr class="mb-3 md:mb-9" />
     <h2 class="text-lg text-darkBlue mb-5 md:text-3xl md:mb-11">
       {{ question.title }}
@@ -39,6 +42,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "QuestionWindow",
   props: {
@@ -50,16 +55,24 @@ export default {
     };
   },
   methods: {
-    confirmHandler(id) {
-      if (+this.$route.params.id === 1) {
-        const answerIndex = this.question.answers.indexOf(this.chosen);
-        const scenarioNumber = answerIndex + 1;
+    confirmHandler() {
+      const questionIndex = this.$store.getters.currentQuestionIndex;
+      if (questionIndex === 0) {
+        const scenarioNumber = this.question.answers.indexOf(this.chosen) + 1;
         const scenario = this.question.scenarios[scenarioNumber];
         this.$store.dispatch("setScriptByScenario", scenario);
+        this.$store.commit("SET_CURRENT_QUESTION", 1);
       }
-      this.$router.push(`${id}`);
+      this.$store.commit("SET_CURRENT_QUESTION", questionIndex + 1);
+      const newHistoryNote = {
+        question: this.question.title,
+        answer: this.chosen,
+      };
+      this.$store.commit("ADD_HISTORY_NOTE", newHistoryNote);
+      this.chosen = null;
     },
   },
+  computed: mapGetters(["currentQuestionIndex", "questionsCount"]),
 };
 </script>
 

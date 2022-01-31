@@ -7,18 +7,32 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentQuestionIndex: 0,
-    chosenScript: null,
-    surveyHistory: [
-      // пример
-      {
-        question: "Заданный вопрос",
-        answer: "Ответ, который выбрал пользователь",
-      },
-    ],
+    chosenScript: [1],
+    surveyHistory: [],
+  },
+  getters: {
+    currentQuestionId(state) {
+      return state.chosenScript[state.currentQuestionIndex];
+    },
+    currentQuestionIndex(state) {
+      return state.currentQuestionIndex;
+    },
+    surveyHistory(state) {
+      return state.surveyHistory;
+    },
+    questionsCount(state) {
+      return state.chosenScript.length;
+    },
   },
   mutations: {
     SET_SCRIPT(state, script) {
       state.chosenScript = script;
+    },
+    SET_CURRENT_QUESTION(state, number) {
+      state.currentQuestionIndex = number;
+    },
+    ADD_HISTORY_NOTE(state, note) {
+      state.surveyHistory.push(note);
     },
   },
   actions: {

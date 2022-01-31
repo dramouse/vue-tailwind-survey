@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Survey from "../views/Survey.vue";
+import Result from "../views/Result.vue";
 
 Vue.use(VueRouter);
 
@@ -12,9 +13,14 @@ const routes = [
     component: Home,
   },
   {
-    path: "/questions/:id",
+    path: "/questions",
     name: "Survey",
     component: Survey,
+  },
+  {
+    path: "/result",
+    name: "Result",
+    component: Result,
   },
 ];
 

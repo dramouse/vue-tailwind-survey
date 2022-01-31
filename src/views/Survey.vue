@@ -1,50 +1,44 @@
 <template>
-  <div class="w-screen h-screen md:pt-6">
-    <h1
-      class="hidden mx-auto text-center text-2xl leading-tight max-w-xl mb-6 text-darkBlue md:block"
-    >
-      Пройдите небольшой опрос и узнайте,
-      <span class="text-mainRed"
-        >как избежать рисков при продаже или покупке</span
-      >
-      вашей квартиры
-    </h1>
+  <SurveyPage>
     <QuestionWindow :question="currentQuestion" />
-  </div>
+  </SurveyPage>
 </template>
 
 <script>
 import QuestionWindow from "../components/Survey/QuestionWindow.vue";
 import questionsData from "../data/questions.js";
+import SurveyPage from "../components/layout/SurveyPage.vue";
 
 export default {
   name: "Survey",
-  components: { QuestionWindow },
+  components: { QuestionWindow, SurveyPage },
   data() {
     return {
-      currentQuestion: null,
+      currentQuestion: {},
     };
   },
-  methods: {
-    updateQuestion(to) {
-      let questionId;
-      if (to) {
-        questionId = to.params.id;
-      } else {
-        questionId = this.$route.params.id;
-      }
-      this.currentQuestion = questionsData.questions.find(
-        (item) => item.id === +questionId
-      );
-      console.log(questionId, this.currentQuestion);
+  computed: {
+    currentQuestionId() {
+      return this.$store.getters.currentQuestionId;
     },
   },
   beforeMount() {
-    this.updateQuestion();
+    this.currentQuestion = questionsData.questions.find(
+      (item) => item.id === this.currentQuestionId
+    );
   },
-  beforeRouteUpdate(to, from, next) {
-    this.updateQuestion(to);
-    next();
+  watch: {
+    currentQuestionId() {
+      if (!this.currentQuestionId) {
+        this.$router.push("result");
+        this.$store.commit("SET_SCRIPT", [1]);
+        this.$store.commit("SET_CURRENT_QUESTION", 0);
+        return;
+      }
+      this.currentQuestion = questionsData.questions.find(
+        (item) => item.id === this.currentQuestionId
+      );
+    },
   },
 };
 </script>
