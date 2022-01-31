@@ -10,3 +10,11 @@
 - vuex
 - vue-roter
 - tailwind
+
+В самом опроснике 6 сценариев. В зависимости от выбранного в 1 вопросе
+ответа варируется порядок и наличие следующих вопросов.
+
+![screenshot 1](public/Screenshot1.jpg)
+![screenshot 1](public/Screenshot2.jpg)
+![screenshot 1](public/Screenshot3.jpg)
+![screenshot 1](public/Screenshot4.jpg)
